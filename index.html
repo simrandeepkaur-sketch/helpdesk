@@ -98,3 +98,600 @@ select:disabled,input:disabled{background:var(--blue-xlt);color:var(--blue-d);fo
 /* SLACK NOTE */
 .slack-note{background:var(--blue-xlt);border:1px solid var(--blue-lt);border-radius:10px;padding:11px 14px;font-size:12.5px;color:#1e40af;line-height:1.5;margin-top:16px;display:flex;gap:9px;align-items:flex-start}
 .slack-note i{font-size:16px;flex:none;margin-top:1px}
+/* SUCCESS */
+.success{text-align:center;padding:16px 0}
+.success-ico{width:72px;height:72px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:16px}
+.success-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.success-sub{font-size:13.5px;color:var(--mut);line-height:1.6;margin-bottom:18px}
+.ticket-ref{display:inline-block;font-family:'Courier New',monospace;font-size:17px;font-weight:700;color:var(--blue-d);background:var(--blue-xlt);padding:10px 22px;border-radius:11px;margin-bottom:18px}
+.next-card{background:#f8fbff;border:1px solid var(--border);border-radius:12px;padding:16px;text-align:left;margin-bottom:18px}
+.next-title{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--mut2);margin-bottom:10px}
+.next-step{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);padding:6px 0;border-bottom:1px solid var(--border)}
+.next-step:last-child{border:none}
+.next-step i{color:var(--green);font-size:16px;flex:none}
+.footer{text-align:center;font-size:12px;color:var(--mut2);margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo"><i class="ti ti-building-hospital"></i></div>
+    <div class="org-name">Prabh Aasra</div>
+    <div class="org-sub">ਟਿਕਟ ਬਣਾਓ | Raise a ticket - Seva desk</div>
+  </div>
+
+  <div class="card">
+    <!-- STEP INDICATOR -->
+    <div class="steps" id="steps">
+      <div class="step"><div class="step-line" id="line-1"></div><div class="step-dot active" id="dot-1">1</div><div class="step-lbl active" id="lbl-1">ਕਿਸਮ | Type</div></div>
+      <div class="step"><div class="step-line" id="line-2"></div><div class="step-dot wait" id="dot-2">2</div><div class="step-lbl" id="lbl-2">ਵੇਰਵੇ | Details</div></div>
+      <div class="step"><div class="step-line" id="line-3"></div><div class="step-dot wait" id="dot-3">3</div><div class="step-lbl" id="lbl-3">ਵਿਭਾਗ | Department</div></div>
+      <div class="step"><div class="step-dot wait" id="dot-4">4</div><div class="step-lbl" id="lbl-4">ਜਮ੍ਹਾਂ | Submit</div></div>
+    </div>
+
+    <!-- STEP 1: TYPE -->
+    <div class="panel active" id="panel-1">
+      <div class="sec-title">ਤੁਸੀਂ ਕੀ ਬਣਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? | What do you want to raise?</div>
+      <div class="sec-sub">ਟਿਕਟ ਦੀ ਕਿਸਮ ਚੁਣੋ। ਕੋਈ ਚੀਜ਼ ਖਰਾਬ ਹੋਵੇ ਤਾਂ ਸ਼ਿਕਾਇਤ ਬਣਾਓ, ਜਾਂ ਨਵੀਂ ਲੋੜ ਲਈ ਰਿਕਵੈਸਟ ਬਣਾਓ। | Choose complaint or new requirement.</div>
+      <div class="type-grid">
+        <div class="type-card" id="type-complaint" onclick="selectType('complaint')">
+          <div class="type-ico" style="background:var(--pink-lt);color:var(--pink)"><i class="ti ti-alert-circle"></i></div>
+          <div class="type-name">ਸ਼ਿਕਾਇਤ | Complaint</div>
+          <div class="type-desc">ਕੁਝ ਖਰਾਬ ਹੈ, ਕੰਮ ਨਹੀਂ ਕਰ ਰਿਹਾ, ਜਾਂ ਮੁਰੰਮਤ ਚਾਹੀਦੀ ਹੈ | Something needs repair</div>
+        </div>
+        <div class="type-card" id="type-requirement" onclick="selectType('requirement')">
+          <div class="type-ico" style="background:var(--blue-lt);color:var(--blue)"><i class="ti ti-clipboard-plus"></i></div>
+          <div class="type-name">ਨਵੀਂ ਲੋੜ | New requirement</div>
+          <div class="type-desc">ਨਵੀਂ ਚੀਜ਼, ਸਮੱਗਰੀ ਜਾਂ ਸੇਵਾ ਦੀ ਲੋੜ ਹੈ | New item, material, or service</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pri" id="next-1" onclick="goStep(2)" disabled style="flex:1">ਅੱਗੇ | Continue <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 2: DETAILS -->
+    <div class="panel" id="panel-2">
+      <div class="sec-title" id="step2-title">ਵੇਰਵੇ ਦੱਸੋ | Tell us the details</div>
+      <div class="sec-sub" id="step2-sub">ਸਾਫ਼ ਲਿਖੋ ਤਾਂ ਜੋ ਟੀਮ ਜਲਦੀ ਕਾਰਵਾਈ ਕਰ ਸਕੇ। | Describe clearly so the team can act fast.</div>
+      <div class="fg"><label>ਤੁਹਾਡਾ ਨਾਮ | Your name <span class="req">*</span></label><input type="text" id="emp-name" placeholder="ਪੂਰਾ ਨਾਮ ਲਿਖੋ | Enter your full name"></div>
+      <div class="fg">
+        <label>ਤੁਹਾਡਾ ਵਿਭਾਗ | Your department <span class="req">*</span></label>
+        <select id="staff-department" onchange="syncOwnDepartment()">
+          <option value="">ਆਪਣਾ ਵਿਭਾਗ ਚੁਣੋ | Select your department...</option>
+          <option value="Civil">ਸਿਵਲ | Civil</option><option value="IT">ਆਈ.ਟੀ. | IT</option><option value="Electrical">ਬਿਜਲੀ | Electrical</option>
+          <option value="Plumbing">ਪਲੰਬਿੰਗ | Plumbing</option><option value="Housekeeping">ਹਾਊਸਕੀਪਿੰਗ | Housekeeping</option><option value="Record">ਰਿਕਾਰਡ | Record</option><option value="General">ਜਨਰਲ | General</option>
+        </select>
+        <div class="form-note" id="staff-dept-note">ਨਵੀਂ ਲੋੜ ਵਾਲੀ ਟਿਕਟ ਤੁਹਾਡੇ ਆਪਣੇ ਵਿਭਾਗ ਨੂੰ ਹੀ ਜਾਵੇਗੀ। | Requirement tickets are routed to your own department.</div>
+      </div>
+      <div class="fg" id="summary-wrap"><label id="summary-lbl">ਸਾਰ | Summary <span class="req">*</span></label><input type="text" id="summary" placeholder="ਇੱਕ ਲਾਈਨ ਸਾਰ | One line summary"></div>
+      <div class="fg" id="items-wrap" style="display:none">
+        <label>ਲੋੜੀਂਦੀਆਂ ਚੀਜ਼ਾਂ | Requirement items <span class="req">*</span></label>
+        <div class="item-box">
+          <div class="item-head">
+            <span>ਲੜੀ | Sr</span><span>ਚੀਜ਼ | Item</span><span>ਮਾਤਰਾ | Qty</span><span>ਯੂਨਿਟ | Unit</span><span>ਲਗਭਗ | Approx</span><span></span>
+          </div>
+          <div id="requirement-items"></div>
+        </div>
+        <button class="btn btn-ghost add-item-btn" type="button" onclick="addItem()"><i class="ti ti-plus"></i> ਚੀਜ਼ ਜੋੜੋ | Add item</button>
+      </div>
+      <div class="fg"><label id="description-lbl">ਪੂਰਾ ਵੇਰਵਾ | Detailed description <span class="req" id="description-req">*</span></label><textarea id="description" placeholder="ਪੂਰਾ ਵੇਰਵਾ ਲਿਖੋ | Describe in detail"></textarea></div>
+      <div class="fg">
+        <label>ਇਹ ਕਿੰਨਾ ਜ਼ਰੂਰੀ ਹੈ? | How urgent is this? <span class="req">*</span></label>
+        <div class="urg-grid">
+          <div class="urg" id="urg-24h" onclick="selectUrgency('24h')"><div class="urg-name"><i class="ti ti-clock"></i>24 ਘੰਟੇ | 24 hrs</div><div class="urg-time">ਇੱਕ ਦਿਨ ਵਿੱਚ ਲੋੜ | Needed within one day</div></div>
+          <div class="urg" id="urg-1week" onclick="selectUrgency('1week')"><div class="urg-name"><i class="ti ti-calendar-event"></i>1 ਹਫ਼ਤਾ | 1 week</div><div class="urg-time">7 ਦਿਨਾਂ ਵਿੱਚ ਲੋੜ | Needed within 7 days</div></div>
+          <div class="urg" id="urg-1month" onclick="selectUrgency('1month')"><div class="urg-name"><i class="ti ti-calendar"></i>1 ਮਹੀਨਾ | 1 month</div><div class="urg-time">30 ਦਿਨਾਂ ਤੱਕ ਰੁਕ ਸਕਦਾ ਹੈ | Can wait up to 30 days</div></div>
+          <div class="urg" id="urg-3month" onclick="selectUrgency('3month')"><div class="urg-name"><i class="ti ti-calendar-time"></i>3 ਮਹੀਨੇ | 3 month</div><div class="urg-time">ਯੋਜਨਾਬੱਧ ਲੋੜ | Planned requirement</div></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goStep(1)"><i class="ti ti-arrow-left"></i> ਪਿੱਛੇ | Back</button>
+        <button class="btn btn-pri" onclick="goStep(3)">ਅੱਗੇ | Continue <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 3: LOCATION + DEPARTMENT -->
+    <div class="panel" id="panel-3">
+      <div class="sec-title" id="step3-title">ਥਾਂ ਅਤੇ ਵਿਭਾਗ | Where and which department?</div>
+      <div class="sec-sub" id="step3-sub">ਆਪਣੀ ਥਾਂ ਅਤੇ ਵਿਭਾਗ ਚੁਣੋ। ਯੂਨਿਟ ਹੈੱਡ ਨੂੰ ਆਪੇ ਸੁਨੇਹਾ ਜਾਵੇਗਾ। | Select location and department.</div>
+      <div class="row2">
+        <div class="fg"><label>ਸ਼ਾਖਾ | Branch <span class="req">*</span></label>
+          <select id="branch" onchange="updateBuilding()">
+            <option value="">ਚੁਣੋ | Select...</option>
+            <option value="Padiala">ਪਡਿਆਲਾ | Padiala</option><option value="Hospital">ਹਸਪਤਾਲ | Hospital</option><option value="Jhanjeri">ਝੰਜੇੜੀ | Jhanjeri</option><option value="Raikot">ਰਾਏਕੋਟ | Raikot</option>
+          </select>
+        </div>
+        <div class="fg"><label>ਇਮਾਰਤ | Building <span class="req">*</span></label><select id="building" onchange="updateFloor()"><option value="">ਪਹਿਲਾਂ ਸ਼ਾਖਾ ਚੁਣੋ | Select branch first...</option></select></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>ਮੰਜ਼ਿਲ | Floor</label><select id="floor" onchange="updateRoom()"><option value="">ਪਹਿਲਾਂ ਇਮਾਰਤ ਚੁਣੋ | Select building first...</option></select></div>
+        <div class="fg"><label>ਕਮਰਾ / ਖੇਤਰ | Room / Area</label><select id="room"><option value="">ਪਹਿਲਾਂ ਮੰਜ਼ਿਲ ਚੁਣੋ | Select floor first...</option></select></div>
+      </div>
+      <div class="fg">
+        <label id="department-label">ਵਿਭਾਗ | Department <span class="req">*</span></label>
+        <select id="department" onchange="updateUnitHead()">
+          <option value="">ਵਿਭਾਗ ਚੁਣੋ | Select department...</option>
+          <option value="Civil">ਸਿਵਲ | Civil</option><option value="IT">ਆਈ.ਟੀ. | IT</option><option value="Electrical">ਬਿਜਲੀ | Electrical</option>
+          <option value="Plumbing">ਪਲੰਬਿੰਗ | Plumbing</option><option value="Housekeeping">ਹਾਊਸਕੀਪਿੰਗ | Housekeeping</option><option value="Record">ਰਿਕਾਰਡ | Record</option><option value="General">ਜਨਰਲ | General</option>
+        </select>
+        <div class="form-note" id="department-note" style="display:none">ਨਵੀਂ ਲੋੜ ਤੁਹਾਡੇ ਆਪਣੇ ਵਿਭਾਗ ਲਈ ਲਾਕ ਹੈ। | New requirements are locked to your own department.</div>
+        <div id="head-card" style="display:none" class="head-card">
+          <div class="head-av" id="head-av">—</div>
+          <div class="head-info">
+            <div class="head-name" id="head-name">—</div>
+            <div class="head-role" id="head-role"><i class="ti ti-user-check" style="font-size:13px"></i>ਯੂਨਿਟ ਹੈੱਡ | Unit head</div>
+          </div>
+          <span class="head-auto">ਆਪੇ ਚੁਣਿਆ | Auto-selected</span>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goStep(2)"><i class="ti ti-arrow-left"></i> ਪਿੱਛੇ | Back</button>
+        <button class="btn btn-pri" onclick="goStep(4)">ਜਾਂਚੋ | Review <i class="ti ti-arrow-right"></i></button>
+      </div>
+    </div>
+
+    <!-- STEP 4: REVIEW + SUBMIT -->
+    <div class="panel" id="panel-4">
+      <div class="sec-title">ਟਿਕਟ ਜਾਂਚੋ | Review your ticket</div>
+      <div class="sec-sub">ਜਮ੍ਹਾਂ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ ਸਭ ਕੁਝ ਚੈਕ ਕਰੋ। ਇਹ ਸਿੱਧਾ ਸੰਬੰਧਤ ਵਿਅਕਤੀ ਨੂੰ ਜਾਵੇਗਾ। | Check before submitting.</div>
+      <div id="review-content" style="background:#f8fbff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:4px"></div>
+      <div class="slack-note"><i class="ti ti-message-2"></i><span><b id="review-head">ਯੂਨਿਟ ਹੈੱਡ | The unit head</b> ਨੂੰ ਇਹ ਟਿਕਟ ਤੁਰੰਤ ਮਿਲੇਗੀ। | will receive this ticket instantly.</span></div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="goStep(3)"><i class="ti ti-arrow-left"></i> ਪਿੱਛੇ | Back</button>
+        <button class="btn btn-pri" id="submit-btn" onclick="submitTicket()"><i class="ti ti-send"></i> ਜਮ੍ਹਾਂ ਕਰੋ | Submit ticket</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="panel" id="panel-success">
+      <div class="success">
+        <div class="success-ico" id="success-ico" style="background:var(--green-lt);color:var(--green)"><i class="ti ti-check"></i></div>
+        <div class="success-title">ਟਿਕਟ ਜਮ੍ਹਾਂ ਹੋ ਗਈ | Ticket submitted</div>
+        <div class="success-sub">ਤੁਹਾਡੀ ਟਿਕਟ ਸੰਬੰਧਤ ਵਿਅਕਤੀ ਨੂੰ ਭੇਜ ਦਿੱਤੀ ਗਈ ਹੈ। ਇਹ ਪੌਪਅਪ ਆਪੇ ਬੰਦ ਹੋ ਜਾਵੇਗਾ। | Sent successfully.</div>
+        <div class="ticket-ref" id="success-ref">SVA-2026-0000</div>
+        <div class="next-card">
+          <div class="next-title">ਅਗਲਾ ਕਦਮ | What happens next</div>
+          <div class="next-step"><i class="ti ti-circle-check"></i><span><b id="success-head">ਯੂਨਿਟ ਹੈੱਡ | Unit head</b> ਟਿਕਟ ਵੇਖੇਗਾ | reviews the ticket</span></div>
+          <div class="next-step"><i class="ti ti-circle-check"></i><span>ਸਾਰੀਆਂ ਸ਼ਾਖਾਵਾਂ ਵਿੱਚ ਸਟਾਕ ਚੈਕ ਹੋਵੇਗਾ | Stock checked at all branches</span></div>
+          <div class="next-step"><i class="ti ti-circle-check"></i><span>GM ਖਰੀਦਣ ਜਾਂ ਹੋਰ ਥਾਂ ਤੋਂ ਭੇਜਣ ਦਾ ਫੈਸਲਾ ਕਰੇਗਾ | GM decides next step</span></div>
+          <div class="next-step"><i class="ti ti-circle-check"></i><span>ਤੁਹਾਨੂੰ ਹਰ ਕਦਮ ਦੀ ਜਾਣਕਾਰੀ ਮਿਲੇਗੀ | You get notified</span></div>
+        </div>
+        <div class="btn-row"><button class="btn btn-pri" onclick="resetForm()"><i class="ti ti-plus"></i>ਹੋਰ ਟਿਕਟ ਬਣਾਓ | Raise another ticket</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">Prabh Aasra · ਅੰਦਰੂਨੀ ਵਰਤੋਂ ਲਈ | Internal use only · Padiala · Hospital · Jhanjeri · Raikot</div>
+</div>
+
+<script>
+// ── CONFIG ──
+const SUBMIT_WEBHOOK = ''; // paste n8n webhook URL here when ready
+const DEMO_DB_KEY = 'prabh_aasra_tickets_v2';
+
+// Database model expected by the backend:
+// tickets(ticket_id, type, raised_by, staff_department, target_department,
+//         summary, description, urgency, branch, building, floor, room, created_at)
+// requirement_items(ticket_id, sr_no, item_name, qty, unit, approx_price nullable)
+// For requirement tickets, target_department must always equal staff_department.
+
+// ── UNIT HEADS ──
+const UNIT_HEADS = {
+  'Civil':        { name:'Harpreet Kaur',   av:'HK' },
+  'IT':           { name:'Rajan Mehta',     av:'RM' },
+  'Electrical':   { name:'Sukhdev Singh',   av:'SS' },
+  'Plumbing':     { name:'Manjit Kumar',    av:'MK' },
+  'Housekeeping': { name:'Gurpreet Devi',   av:'GD' },
+  'Record':       { name:'Anil Sharma',     av:'AS' },
+  'General':      { name:'Baljinder Singh', av:'BS' },
+};
+
+// ── LOCATIONS ──
+const LOC = {
+  Padiala:  { 'Building A':{'Ground':['Main hall','Reception','Store'],'Floor 1':['Ward 2','Ward 3','Admin']},'Building B':{'Ground':['Store','Records'],'Floor 1':['Staff quarters']} },
+  Hospital: { 'Building A':{'Ground':['OPD reception','Ward 1','Store'],'Floor 1':['Ward 4','ICU']},'Building B':{'Ground':['Lab','Pharmacy'],'Floor 1':['Server room B','Ward 5','Ward 6']},'Admin block':{'Ground':['Accounts','HR office','Conference room']} },
+  Jhanjeri: { 'Building A':{'Ground':['Reception','Admin','Store'],'Floor 1':['Residence 1','Residence 2']} },
+  Raikot:   { 'Building A':{'Ground':['Main hall','Store','Reception'],'Floor 1':['Office','Conference']} }
+};
+
+let state = { type:'', urgency:'' };
+const urgencyIds = ['24h','1week','1month','3month'];
+const urgLabels = { '24h':'24 ਘੰਟੇ | 24 hrs','1week':'1 ਹਫ਼ਤਾ | 1 week','1month':'1 ਮਹੀਨਾ | 1 month','3month':'3 ਮਹੀਨੇ | 3 month' };
+
+// ── TYPE SELECTION ──
+function selectType(t) {
+  state.type = t;
+  document.getElementById('type-complaint').className  = 'type-card' + (t==='complaint'?'  sel-complaint':'');
+  document.getElementById('type-requirement').className = 'type-card' + (t==='requirement'?' sel-req':'');
+  document.getElementById('next-1').disabled = false;
+  const isC = t === 'complaint';
+  document.getElementById('step2-title').textContent = isC ? 'ਕੀ ਸਮੱਸਿਆ ਹੈ? | Tell us what is wrong' : 'ਤੁਹਾਨੂੰ ਕੀ ਚਾਹੀਦਾ ਹੈ? | Tell us what you need';
+  document.getElementById('step2-sub').textContent   = isC ? 'ਸਮੱਸਿਆ ਸਾਫ਼ ਲਿਖੋ ਤਾਂ ਜੋ ਟੀਮ ਜਲਦੀ ਕਾਰਵਾਈ ਕਰ ਸਕੇ। | Describe the issue clearly.' : 'ਹਰ ਲੋੜੀਂਦੀ ਚੀਜ਼ ਜੋੜੋ। ਚੀਜ਼ ਦਾ ਨਾਮ, ਮਾਤਰਾ ਅਤੇ ਯੂਨਿਟ ਲਾਜ਼ਮੀ ਹਨ। | Add every required item.';
+  document.getElementById('summary-lbl').innerHTML   = (isC ? 'ਸਮੱਸਿਆ ਕੀ ਹੈ? | What is the problem?' : 'ਤੁਹਾਨੂੰ ਕੀ ਚਾਹੀਦਾ ਹੈ? | What do you need?') + ' <span class="req">*</span>';
+  document.getElementById('summary').placeholder     = isC ? 'ਜਿਵੇਂ Ward 4 ਵਿੱਚ AC ਨਹੀਂ ਚੱਲ ਰਿਹਾ | e.g. AC not working' : 'ਜਿਵੇਂ ਰਿਸੈਪਸ਼ਨ ਲਈ 2 ਕੁਰਸੀਆਂ | e.g. 2 office chairs';
+  document.getElementById('summary-wrap').style.display = isC ? 'block' : 'none';
+  document.getElementById('items-wrap').style.display = isC ? 'none' : 'block';
+  document.getElementById('description-lbl').innerHTML = isC ? 'ਪੂਰਾ ਵੇਰਵਾ | Detailed description <span class="req" id="description-req">*</span>' : 'ਟਿੱਪਣੀ | Remarks';
+  document.getElementById('description').placeholder = isC ? 'ਕੀ, ਕਿੱਥੇ, ਕਦੋਂ ਤੋਂ | Describe in detail' : 'ਵਿਭਾਗ ਲਈ ਕੋਈ ਟਿੱਪਣੀ | Any notes for your department';
+  if (!isC && !document.querySelector('#requirement-items .item-row')) addItem();
+  syncOwnDepartment();
+}
+
+// ── URGENCY ──
+function selectUrgency(u) {
+  state.urgency = u;
+  urgencyIds.forEach(id => {
+    const el = document.getElementById('urg-'+id);
+    if (!el) return;
+    el.className = 'urg' + (id===u ? ' urg-sel' : '');
+  });
+}
+
+// ── REQUIREMENT ITEMS ──
+function addItem() {
+  const list = document.getElementById('requirement-items');
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <div class="item-sr"></div>
+    <input class="item-name" type="text" placeholder="ਚੀਜ਼ ਦਾ ਨਾਮ | Item name">
+    <input class="item-qty" type="number" min="0.01" step="0.01" placeholder="ਮਾਤਰਾ | Qty">
+    <select class="item-unit">
+      <option value="">ਯੂਨਿਟ | Unit</option>
+      <option value="pcs">ਪੀਸ | pcs</option><option value="box">ਡੱਬਾ | box</option><option value="packet">ਪੈਕਟ | packet</option><option value="kg">ਕਿਲੋ | kg</option>
+      <option value="litre">ਲੀਟਰ | litre</option><option value="meter">ਮੀਟਰ | meter</option><option value="pair">ਜੋੜਾ | pair</option><option value="set">ਸੈੱਟ | set</option>
+      <option value="other">ਹੋਰ | other</option>
+    </select>
+    <input class="item-price" type="number" min="0" step="0.01" placeholder="ਚੋਣਵਾਂ | Optional">
+    <button class="icon-btn" type="button" onclick="removeItem(this)" title="ਚੀਜ਼ ਹਟਾਓ | Remove item"><i class="ti ti-trash"></i></button>
+  `;
+  list.appendChild(row);
+  renumberItems();
+}
+
+function removeItem(btn) {
+  const row = btn.closest('.item-row');
+  if (row) row.remove();
+  if (!document.querySelector('#requirement-items .item-row')) addItem();
+  renumberItems();
+}
+
+function renumberItems() {
+  document.querySelectorAll('#requirement-items .item-row').forEach((row, idx) => {
+    row.querySelector('.item-sr').textContent = idx + 1;
+  });
+}
+
+function collectRequirementItems() {
+  return Array.from(document.querySelectorAll('#requirement-items .item-row')).map((row, idx) => {
+    const price = row.querySelector('.item-price').value.trim();
+    return {
+      sr_no: idx + 1,
+      item_name: row.querySelector('.item-name').value.trim(),
+      qty: Number(row.querySelector('.item-qty').value),
+      unit: row.querySelector('.item-unit').value.trim(),
+      approx_price: price === '' ? null : Number(price),
+    };
+  });
+}
+
+function validateRequirementItems() {
+  const rows = Array.from(document.querySelectorAll('#requirement-items .item-row'));
+  if (!rows.length) { alert('ਘੱਟੋ-ਘੱਟ ਇੱਕ ਚੀਜ਼ ਜੋੜੋ | Please add at least one item'); addItem(); return false; }
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const name = row.querySelector('.item-name');
+    const qty = row.querySelector('.item-qty');
+    const unit = row.querySelector('.item-unit');
+    const price = row.querySelector('.item-price');
+    if (!name.value.trim()) { alert('Sr no. ' + (i + 1) + ' ਲਈ ਚੀਜ਼ ਦਾ ਨਾਮ ਲਿਖੋ | Please enter item name'); name.focus(); return false; }
+    if (!qty.value || Number(qty.value) <= 0) { alert('Sr no. ' + (i + 1) + ' ਲਈ ਠੀਕ ਮਾਤਰਾ ਲਿਖੋ | Please enter valid qty'); qty.focus(); return false; }
+    if (!unit.value.trim()) { alert('Sr no. ' + (i + 1) + ' ਲਈ ਯੂਨਿਟ ਚੁਣੋ | Please select unit'); unit.focus(); return false; }
+    if (price.value && Number(price.value) < 0) { alert('ਲਗਭਗ ਕੀਮਤ ਨੈਗੇਟਿਵ ਨਹੀਂ ਹੋ ਸਕਦੀ | Approx price cannot be negative'); price.focus(); return false; }
+  }
+  return true;
+}
+
+// ── LOCATION CASCADE ──
+function updateBuilding() {
+  const br = v('branch'); const sel = document.getElementById('building');
+  sel.innerHTML = '<option value="">ਇਮਾਰਤ ਚੁਣੋ | Select building...</option>';
+  if (br && LOC[br]) Object.keys(LOC[br]).forEach(b => sel.add(new Option(b,b)));
+  document.getElementById('floor').innerHTML = '<option value="">ਪਹਿਲਾਂ ਇਮਾਰਤ ਚੁਣੋ | Select building first...</option>';
+  document.getElementById('room').innerHTML  = '<option value="">ਪਹਿਲਾਂ ਮੰਜ਼ਿਲ ਚੁਣੋ | Select floor first...</option>';
+}
+function updateFloor() {
+  const br=v('branch'),bl=v('building'); const sel=document.getElementById('floor');
+  sel.innerHTML = '<option value="">ਮੰਜ਼ਿਲ ਚੁਣੋ | Select floor...</option>';
+  if (br&&bl&&LOC[br]&&LOC[br][bl]) Object.keys(LOC[br][bl]).forEach(f => sel.add(new Option(f,f)));
+  document.getElementById('room').innerHTML = '<option value="">ਪਹਿਲਾਂ ਮੰਜ਼ਿਲ ਚੁਣੋ | Select floor first...</option>';
+}
+function updateRoom() {
+  const br=v('branch'),bl=v('building'),fl=v('floor'); const sel=document.getElementById('room');
+  sel.innerHTML = '<option value="">ਕਮਰਾ ਚੁਣੋ | Select room...</option>';
+  if (br&&bl&&fl&&LOC[br]&&LOC[br][bl]&&LOC[br][bl][fl]) LOC[br][bl][fl].forEach(r => sel.add(new Option(r,r)));
+}
+
+// ── UNIT HEAD ──
+function updateUnitHead() {
+  const dept = v('department'); const card = document.getElementById('head-card');
+  if (dept && UNIT_HEADS[dept]) {
+    const h = UNIT_HEADS[dept];
+    document.getElementById('head-av').textContent   = h.av;
+    document.getElementById('head-name').textContent = h.name;
+    document.getElementById('head-role').innerHTML   = '<i class="ti ti-user-check" style="font-size:13px"></i> ' + dept + ' ਯੂਨਿਟ ਹੈੱਡ | unit head';
+    card.style.display = 'flex';
+  } else { card.style.display = 'none'; }
+}
+
+function syncOwnDepartment() {
+  const staffDept = v('staff-department');
+  const target = document.getElementById('department');
+  const note = document.getElementById('department-note');
+  const label = document.getElementById('department-label');
+  const isRequirement = state.type === 'requirement';
+  if (isRequirement) {
+    target.value = staffDept || '';
+    target.disabled = true;
+    note.style.display = 'block';
+    label.innerHTML = 'ਪ੍ਰਾਪਤ ਕਰਨ ਵਾਲਾ ਵਿਭਾਗ | Receiving department <span class="req">*</span>';
+    document.getElementById('step3-title').textContent = 'ਇਹ ਕਿੱਥੇ ਚਾਹੀਦਾ ਹੈ? | Where is this required?';
+    document.getElementById('step3-sub').textContent = 'ਥਾਂ ਚੁਣੋ। ਇਹ ਲੋੜ ਸਿਰਫ਼ ਤੁਹਾਡੇ ਆਪਣੇ ਵਿਭਾਗ ਨੂੰ ਭੇਜੀ ਜਾਵੇਗੀ। | Sent only to your own department.';
+  } else {
+    target.disabled = false;
+    note.style.display = 'none';
+    label.innerHTML = 'ਵਿਭਾਗ | Department <span class="req">*</span>';
+    document.getElementById('step3-title').textContent = 'ਥਾਂ ਅਤੇ ਵਿਭਾਗ | Where and which department?';
+    document.getElementById('step3-sub').textContent = 'ਆਪਣੀ ਥਾਂ ਅਤੇ ਵਿਭਾਗ ਚੁਣੋ। ਯੂਨਿਟ ਹੈੱਡ ਨੂੰ ਆਪੇ ਸੁਨੇਹਾ ਜਾਵੇਗਾ। | Select location and department.';
+  }
+  updateUnitHead();
+}
+
+function targetDepartment() {
+  return state.type === 'requirement' ? v('staff-department') : v('department');
+}
+
+// ── NAVIGATION ──
+function goStep(n) {
+  if (n === 3) {
+    if (!v('emp-name')) { alert('ਆਪਣਾ ਨਾਮ ਲਿਖੋ | Please enter your name'); return; }
+    if (!v('staff-department')) { alert('ਆਪਣਾ ਵਿਭਾਗ ਚੁਣੋ | Please select your department'); return; }
+    if (state.type === 'requirement') {
+      if (!validateRequirementItems()) return;
+    } else {
+      if (!v('summary')) { alert('ਸਾਰ ਲਿਖੋ | Please enter a summary'); return; }
+      if (!v('description')) { alert('ਵੇਰਵਾ ਲਿਖੋ | Please add a description'); return; }
+    }
+    if (!state.urgency) { alert('ਜ਼ਰੂਰਤ ਦੀ ਮਿਆਦ ਚੁਣੋ | Please choose how urgent this is'); return; }
+    syncOwnDepartment();
+  }
+  if (n === 4) {
+    if (!v('branch'))     { alert('ਸ਼ਾਖਾ ਚੁਣੋ | Please select a branch'); return; }
+    if (!v('building'))   { alert('ਇਮਾਰਤ ਚੁਣੋ | Please select a building'); return; }
+    syncOwnDepartment();
+    if (!targetDepartment()) { alert('ਵਿਭਾਗ ਚੁਣੋ | Please select a department'); return; }
+    buildReview();
+  }
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  updateProgress(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateProgress(n) {
+  for (let i=1; i<=4; i++) {
+    const dot = document.getElementById('dot-'+i);
+    const lbl = document.getElementById('lbl-'+i);
+    const line = document.getElementById('line-'+i);
+    if (!dot || !lbl) continue;
+    dot.className = 'step-dot ' + (i<n ? 'done' : i===n ? 'active' : 'wait');
+    dot.innerHTML = i<n ? '<i class="ti ti-check"></i>' : String(i);
+    lbl.className = 'step-lbl' + (i===n ? ' active' : '');
+    if (line) line.className = 'step-line' + (i<n ? ' done' : '');
+  }
+}
+
+// ── REVIEW ──
+function buildReview() {
+  const dept = targetDepartment();
+  const h = UNIT_HEADS[dept];
+  const loc = [v('branch'),v('building'),v('floor'),v('room')].filter(Boolean).join(' · ');
+  const typeLabel = state.type === 'complaint' ? 'ਸ਼ਿਕਾਇਤ | Complaint' : 'ਨਵੀਂ ਲੋੜ | New requirement';
+  const rows = [
+    ['ਕਿਸਮ | Type', typeLabel],
+    ['ਬਣਾਉਣ ਵਾਲਾ | Raised by', v('emp-name')],
+    ['ਸਟਾਫ ਵਿਭਾਗ | Staff department', v('staff-department')],
+    ['ਜ਼ਰੂਰਤ | Urgency', urgLabels[state.urgency] || state.urgency],
+    ['ਥਾਂ | Location', loc],
+    [state.type === 'requirement' ? 'ਪ੍ਰਾਪਤ ਕਰਨ ਵਾਲਾ ਵਿਭਾਗ | Receiving department' : 'ਵਿਭਾਗ | Department', dept],
+    ['ਯੂਨਿਟ ਹੈੱਡ | Unit head', h ? h.name : '—'],
+  ];
+  if (state.type === 'complaint') rows.splice(3, 0, ['ਸਾਰ | Summary', v('summary')]);
+
+  const items = state.type === 'requirement' ? collectRequirementItems() : [];
+  const itemHtml = items.length ? `
+    <table class="review-items">
+      <thead><tr><th>ਲੜੀ | Sr</th><th>ਚੀਜ਼ | Item name</th><th>ਮਾਤਰਾ | Qty</th><th>ਯੂਨਿਟ | Unit</th><th>ਲਗਭਗ ਕੀਮਤ | Approx price</th></tr></thead>
+      <tbody>${items.map(item => `
+        <tr>
+          <td>${item.sr_no}</td>
+          <td>${escapeHtml(item.item_name)}</td>
+          <td>${item.qty}</td>
+          <td>${escapeHtml(item.unit)}</td>
+          <td>${item.approx_price === null ? '—' : escapeHtml(String(item.approx_price))}</td>
+        </tr>`).join('')}</tbody>
+    </table>` : '';
+
+  const detailsHtml = state.type === 'requirement'
+    ? `<div style="padding:10px 0 2px;font-size:12.5px;color:var(--mut2)">${escapeHtml(v('description') || 'ਕੋਈ ਟਿੱਪਣੀ ਨਹੀਂ | No remarks added')}</div>${itemHtml}`
+    : `<div style="padding:10px 0 2px;font-size:12.5px;color:var(--mut2)">${escapeHtml(v('description'))}</div>`;
+
+  document.getElementById('review-content').innerHTML =
+    rows.map(([k,val]) => `<div class="review-row"><span class="review-k">${escapeHtml(k)}</span><span class="review-v">${escapeHtml(val||'—')}</span></div>`).join('') +
+    detailsHtml;
+  const rh = document.getElementById('review-head');
+  if (rh) rh.textContent = h ? h.name + ' (' + dept + ' ਯੂਨਿਟ ਹੈੱਡ | unit head)' : 'ਯੂਨਿਟ ਹੈੱਡ | The unit head';
+}
+
+// ── SUBMIT ──
+async function submitTicket() {
+  if (state.type === 'requirement' && !validateRequirementItems()) return;
+  if (!targetDepartment()) { alert('ਵਿਭਾਗ ਚੁਣੋ | Please select a department'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader"></i> ਜਮ੍ਹਾਂ ਹੋ ਰਿਹਾ ਹੈ | Submitting...';
+
+  const payload = buildTicketPayload(makeRef());
+  try {
+    if (SUBMIT_WEBHOOK) {
+      const response = await fetch(SUBMIT_WEBHOOK, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      });
+      if (!response.ok) throw new Error('Webhook failed: ' + response.status);
+    }
+    saveDemoTicket(payload);
+    showSubmitted(payload);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> ਜਮ੍ਹਾਂ ਕਰੋ | Submit ticket';
+    setTimeout(() => closePopupAfterSubmit(payload), 900);
+  } catch(e) {
+    console.warn('Submit error', e);
+    alert('ਟਿਕਟ ਨਹੀਂ ਭੇਜੀ ਜਾ ਸਕੀ। ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ। | Ticket could not be sent. Please try again.');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> ਜਮ੍ਹਾਂ ਕਰੋ | Submit ticket';
+  }
+}
+
+function makeRef() {
+  const prefix = state.type === 'complaint' ? 'CMP' : 'REQ';
+  const year = new Date().getFullYear();
+  return prefix + '-' + year + '-' + String(Math.floor(Math.random()*9000)+1000);
+}
+
+function requirementSummary(items) {
+  const names = items.slice(0, 3).map(item => item.item_name).join(', ');
+  return items.length + ' item' + (items.length === 1 ? '' : 's') + (names ? ': ' + names : '');
+}
+
+function buildTicketPayload(ref) {
+  const dept = targetDepartment();
+  const h = UNIT_HEADS[dept];
+  const items = state.type === 'requirement' ? collectRequirementItems() : [];
+  return {
+    ticket_id: ref,
+    type: state.type,
+    raised_by: v('emp-name'),
+    staff_department: v('staff-department'),
+    target_department: dept,
+    department: dept,
+    unit_head: h ? h.name : '',
+    notification_recipient: h ? { name:h.name, department:dept } : { name:'', department:dept },
+    summary: state.type === 'requirement' ? requirementSummary(items) : v('summary'),
+    description: v('description'),
+    urgency: state.urgency,
+    urgency_label: urgLabels[state.urgency] || state.urgency,
+    branch: v('branch'),
+    building: v('building'),
+    floor: v('floor'),
+    room: v('room'),
+    requirement_items: items,
+    created_at: new Date().toISOString()
+  };
+}
+
+function saveDemoTicket(payload) {
+  try {
+    const db = JSON.parse(localStorage.getItem(DEMO_DB_KEY) || '{"tickets":[],"requirement_items":[]}');
+    db.tickets.push({
+      ticket_id: payload.ticket_id,
+      type: payload.type,
+      raised_by: payload.raised_by,
+      staff_department: payload.staff_department,
+      target_department: payload.target_department,
+      summary: payload.summary,
+      description: payload.description,
+      urgency: payload.urgency,
+      branch: payload.branch,
+      building: payload.building,
+      floor: payload.floor,
+      room: payload.room,
+      created_at: payload.created_at
+    });
+    payload.requirement_items.forEach(item => {
+      db.requirement_items.push(Object.assign({ ticket_id: payload.ticket_id }, item));
+    });
+    localStorage.setItem(DEMO_DB_KEY, JSON.stringify(db));
+  } catch(e) {
+    console.warn('Local demo database unavailable', e);
+  }
+}
+
+function showSubmitted(payload) {
+  const icon = document.getElementById('success-ico');
+  const isComplaint = payload.type === 'complaint';
+  icon.style.cssText = 'width:72px;height:72px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:16px;background:' + (isComplaint ? 'var(--pink-lt)' : 'var(--green-lt)') + ';color:' + (isComplaint ? 'var(--pink)' : 'var(--green)');
+  document.getElementById('success-ref').textContent = payload.ticket_id;
+  document.getElementById('success-head').textContent = payload.unit_head || 'ਯੂਨਿਟ ਹੈੱਡ | Unit head';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-success').classList.add('active');
+  document.getElementById('steps').style.display = 'none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function closePopupAfterSubmit(payload) {
+  const message = { type:'prabh-aasra-ticket-submitted', ticket:payload };
+  try { if (window.opener) window.opener.postMessage(message, '*'); } catch(e) {}
+  try { if (window.parent && window.parent !== window) window.parent.postMessage(message, '*'); } catch(e) {}
+  try { window.close(); } catch(e) {}
+  setTimeout(() => {
+    if (!document.hidden) resetForm();
+  }, 600);
+}
+
+// ── RESET ──
+function resetForm() {
+  state = { type:'', urgency:'' };
+  ['emp-name','summary','description'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['staff-department','branch','building','floor','room','department'].forEach(id => { const el=document.getElementById(id); if(el) el.selectedIndex=0; });
+  urgencyIds.forEach(id => { const el=document.getElementById('urg-'+id); if(el) el.className='urg'; });
+  document.getElementById('department').disabled = false;
+  document.getElementById('department-note').style.display = 'none';
+  document.getElementById('summary-wrap').style.display = 'block';
+  document.getElementById('items-wrap').style.display = 'none';
+  document.getElementById('requirement-items').innerHTML = '';
+  document.getElementById('step2-title').textContent = 'ਵੇਰਵੇ ਦੱਸੋ | Tell us the details';
+  document.getElementById('step2-sub').textContent = 'ਸਾਫ਼ ਲਿਖੋ ਤਾਂ ਜੋ ਟੀਮ ਜਲਦੀ ਕਾਰਵਾਈ ਕਰ ਸਕੇ। | Describe clearly so the team can act fast.';
+  document.getElementById('summary-lbl').innerHTML = 'ਸਾਰ | Summary <span class="req">*</span>';
+  document.getElementById('summary').placeholder = 'ਇੱਕ ਲਾਈਨ ਸਾਰ | One line summary';
+  document.getElementById('department-label').innerHTML = 'ਵਿਭਾਗ | Department <span class="req">*</span>';
+  document.getElementById('step3-title').textContent = 'ਥਾਂ ਅਤੇ ਵਿਭਾਗ | Where and which department?';
+  document.getElementById('step3-sub').textContent = 'ਆਪਣੀ ਥਾਂ ਅਤੇ ਵਿਭਾਗ ਚੁਣੋ। ਯੂਨਿਟ ਹੈੱਡ ਨੂੰ ਆਪੇ ਸੁਨੇਹਾ ਜਾਵੇਗਾ। | Select location and department.';
+  document.getElementById('description-lbl').innerHTML = 'ਪੂਰਾ ਵੇਰਵਾ | Detailed description <span class="req" id="description-req">*</span>';
+  document.getElementById('description').placeholder = 'ਪੂਰਾ ਵੇਰਵਾ ਲਿਖੋ | Describe in detail';
+  document.getElementById('type-complaint').className  = 'type-card';
+  document.getElementById('type-requirement').className = 'type-card';
+  document.getElementById('next-1').disabled = true;
+  document.getElementById('head-card').style.display = 'none';
+  document.getElementById('steps').style.display = 'flex';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-1').classList.add('active');
+  updateProgress(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── HELPER ──
+function v(id) { const el=document.getElementById(id); return el ? el.value.trim() : ''; }
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+</script>
+</body>
+</html>
